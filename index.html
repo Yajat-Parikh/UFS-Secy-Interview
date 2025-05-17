@@ -179,24 +179,27 @@
       const result = document.getElementById("result");
 
       if (!email) {
-        result.textContent = "⚠ Please enter a valid email.";
+        result.innerHTML = "⚠ Please enter a valid email.";
         return;
       }
 
       localStorage.setItem("ufsEmail", email);
-      result.textContent = "⌛ Fetching...";
+      result.innerHTML = "⌛ Fetching...";
 
       try {
-        const res = await fetch(https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)});
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
         const data = await res.json();
 
         if (data.timestamp) {
-          result.textContent = 🕒 Your Interview Time: ${data.timestamp};
+          result.innerHTML = `🕒 Your Interview Time: ${data.timestamp}`;
+          if (data.Prompt) {
+            result.innerHTML += `<br><span style="color: red;">${data.Prompt}</span>`;
+          }
         } else {
-          result.textContent = "❌ No record found for that email.";
+          result.innerHTML = "❌ No record found for that email.";
         }
       } catch (err) {
-        result.textContent = "❗ Error connecting to server.";
+        result.innerHTML = "❗ Error connecting to server.";
         console.error(err);
       }
     }
