@@ -1,108 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UFS Interview Lookup | IIT Kanpur</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Montserrat&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Montserrat&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(to bottom right, #007E33, #00C851);
+      background: url('logo-Picsart-BackgroundRemover.jpg') no-repeat center center fixed;
+      background-size: contain;
+      background-color: #1e1e1e;
       font-family: 'Montserrat', sans-serif;
-      color: #fff;
+      color: #ffffff;
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
       text-align: center;
     }
 
     h1 {
       font-family: 'Orbitron', sans-serif;
       font-size: 2.5rem;
-      margin-bottom: 0.5em;
+      color: #00AEEF;
+      text-shadow: 0 0 10px #00AEEF;
+      margin-bottom: 1rem;
     }
 
-    p {
-      font-size: 1.1rem;
-      margin-bottom: 2em;
+    input, button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      margin: 0.5rem;
+      border: none;
+      border-radius: 8px;
+      outline: none;
+      transition: 0.3s ease;
     }
 
     input {
-      padding: 0.8em;
-      border: none;
-      border-radius: 10px;
-      font-size: 1rem;
-      width: 80%;
-      max-width: 300px;
-      margin-bottom: 1em;
-      outline: none;
+      width: 250px;
     }
 
     button {
-      background-color: #fff;
-      color: #007E33;
-      border: none;
-      padding: 0.7em 1.5em;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 10px;
+      background-color: #00AEEF;
+      color: #fff;
       cursor: pointer;
-      transition: 0.3s ease;
     }
 
     button:hover {
-      background-color: #f1f1f1;
-      transform: scale(1.05);
+      background-color: #007EAE;
     }
 
     #result {
-      margin-top: 2em;
+      margin-top: 1rem;
       font-size: 1.2rem;
-      min-height: 1.5em;
-      transition: 0.3s ease;
-    }
-
-    .footer {
-      position: absolute;
-      bottom: 10px;
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-
-    @media screen and (max-width: 600px) {
-      h1 { font-size: 2rem; }
+      color: #00ffcc;
+      text-shadow: 0 0 5px #00ffcc;
     }
   </style>
 </head>
 <body>
-  <h1>UFS Interviews 2025–26</h1>
-  <p>Enter your IITK email to find your interview slot</p>
 
-  <input type="email" id="emailInput" placeholder="you@iitk.ac.in" />
-  <br>
-  <button onclick="lookup()">Check Time</button>
-
+  <h1>UFS Interview Lookup</h1>
+  <p>Enter your IITK Email ID:</p>
+  <input type="email" id="email" placeholder="your@iitk.ac.in" />
+  <button onclick="lookup()">Check Interview Time</button>
   <div id="result"></div>
-
-  <div class="footer">Ultimate Frisbee Society, IIT Kanpur</div>
 
   <script>
     async function lookup() {
-      const email = document.getElementById('emailInput').value.trim();
-      const result = document.getElementById('result');
-      result.textContent = "Looking up...";
-      
+      const email = document.getElementById("email").value.trim();
+      const result = document.getElementById("result");
+      result.textContent = "⌛ Fetching...";
+
       try {
         const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
         const data = await res.json();
 
-        if (data.error) {
-          result.textContent = "❌ " + data.error;
+        if (data.timestamp) {
+          result.textContent = `🕒 Your Interview Time: ${data.timestamp}`;
         } else {
-          result.textContent = `🕓 Your Interview Time: ${data.timestamp}`;
+          result.textContent = "❌ No record found for that email.";
         }
       } catch (err) {
         result.textContent = "❗ Error connecting to server.";
@@ -110,5 +92,6 @@
       }
     }
   </script>
+
 </body>
 </html>
