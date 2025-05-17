@@ -22,7 +22,6 @@
       overflow: hidden;
     }
 
-    /* Animated background dots */
     .stars {
       position: fixed;
       width: 100%;
@@ -39,7 +38,6 @@
       to { background-position: 1000px 1000px; }
     }
 
-    /* Floating logo enlarged */
     .logo {
       position: absolute;
       top: 20px;
@@ -54,6 +52,14 @@
       0% { transform: translateY(0px); }
       50% { transform: translateY(-15px); }
       100% { transform: translateY(0px); }
+    }
+
+    @media (max-width: 768px) {
+      .logo {
+        width: 80px;
+        height: 80px;
+        animation: none;
+      }
     }
 
     h1 {
@@ -129,7 +135,6 @@
 
   <div class="stars"></div>
 
-  <!-- Floating UFS logo -->
   <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo" />
 
   <h1>UFS Interview Schedule'25 </h1>
@@ -139,7 +144,10 @@
   <div id="result"></div>
 
   <div class="footer">
-    <p>📸 <a href="https://www.instagram.com/ultimatefrisbee_iitk/" target="_blank">Follow us on Instagram</a> for updates!</p>
+    <p>
+      <img src="instagram-logo.png" alt="Instagram" style="height: 1.2em; vertical-align: middle; margin-right: 8px;">
+      <a href="https://www.instagram.com/ultimatefrisbee_iitk/" target="_blank">Follow us on Instagram</a> for updates!
+    </p>
   </div>
 
   <div class="contacts">
@@ -150,17 +158,40 @@
   </div>
 
   <script>
+    // Trigger lookup on enter key press
+    document.getElementById("email").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        lookup();
+      }
+    });
+
+    // Prefill email from localStorage
+    window.onload = () => {
+      const savedEmail = localStorage.getItem("ufsEmail");
+      if (savedEmail) {
+        document.getElementById("email").value = savedEmail;
+      }
+    };
+
     async function lookup() {
-      const email = document.getElementById("email").value.trim();
+      const emailInput = document.getElementById("email");
+      const email = emailInput.value.trim();
       const result = document.getElementById("result");
+
+      if (!email) {
+        result.textContent = "⚠️ Please enter a valid email.";
+        return;
+      }
+
+      localStorage.setItem("ufsEmail", email);
       result.textContent = "⌛ Fetching...";
 
       try {
-        const res = await fetch(https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)});
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
         const data = await res.json();
 
         if (data.timestamp) {
-          result.textContent = 🕒 Your Interview Time: ${data.timestamp};
+          result.textContent = `🕒 Your Interview Time: ${data.timestamp}`;
         } else {
           result.textContent = "❌ No record found for that email.";
         }
