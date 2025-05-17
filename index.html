@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>IITK Interview Lookup</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2em;
+    }
+    input, button {
+      padding: 0.5em;
+      font-size: 1em;
+    }
+    #result {
+      margin-top: 1em;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h2>Check Your Interview Timestamp</h2>
+  <input type="email" id="emailInput" placeholder="Enter your IITK email ID">
+  <button onclick="lookup()">Check</button>
+  <p id="result"></p>
+
+  <script>
+    async function lookup() {
+      const email = document.getElementById('emailInput').value.trim();
+      const result = document.getElementById('result');
+      result.textContent = "Looking up...";
+
+      try {
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
+        const data = await res.json();
+
+        if (data.error) {
+          result.textContent = data.error;
+        } else {
+          result.textContent = `Timestamp: ${data.timestamp}`;
+        }
+      } catch (err) {
+        result.textContent = "Error connecting to server.";
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
