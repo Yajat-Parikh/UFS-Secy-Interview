@@ -92,6 +92,15 @@
       text-shadow: 0 0 5px #00ffcc;
       z-index: 1;
     }
+    .prompt {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #ff6b6b;
+      text-shadow: 0 0 5px #ff6b6b;
+      font-weight: bold;
+      z-index: 1;
+      max-width: 80%;
+    }
     .footer {
       margin-top: 2rem;
       font-size: 0.95rem;
@@ -126,6 +135,7 @@
   <input type="email" id="email" placeholder="your@iitk.ac.in" />
   <button onclick="lookup()">Check Interview Time</button>
   <div id="result"></div>
+  <div id="promptDisplay" class="prompt"></div>
 
   <div class="footer">
     <p>
@@ -161,32 +171,42 @@
       const emailInput = document.getElementById("email");
       const email = emailInput.value.trim();
       const result = document.getElementById("result");
+      const promptDisplay = document.getElementById("promptDisplay");
 
       if (!email) {
         result.textContent = "⚠ Please enter a valid email.";
+        promptDisplay.textContent = "";
         return;
       }
 
       localStorage.setItem("ufsEmail", email);
       result.textContent = "⌛ Fetching...";
+      promptDisplay.textContent = "";
 
       try {
         const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
         const data = await res.json();
+        console.log("Response data:", data); // Log the response for debugging
 
         if (data.timestamp) {
-          let html = `🕒 Your Interview Time: ${data.timestamp}`;
-          const prompt = data.Prompt || data.prompt;
-          if (prompt) {
-            html += `<br><span style="color: red;">${prompt}</span>`;
+          result.textContent = `🕒 Your Interview Time: ${data.timestamp}`;
+          
+          // Check both possible prompt field names
+          const promptText = data.prompt || ""; 
+          
+          if (promptText && promptText.trim() !== "") {
+            promptDisplay.innerHTML = `<p>Your Prompt:</p><p>${promptText}</p>`;
+          } else {
+            promptDisplay.textContent = "No prompt assigned yet.";
           }
-          result.innerHTML = html;
         } else {
           result.textContent = "❌ No record found for that email.";
+          promptDisplay.textContent = "";
         }
       } catch (err) {
         result.textContent = "❗ Error connecting to server.";
-        console.error(err);
+        console.error("Error details:", err);
+        promptDisplay.textContent = "";
       }
     }
   </script>
