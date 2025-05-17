@@ -10,8 +10,6 @@
     body {
       margin: 0;
       padding: 0;
-      background: url('logo-Picsart-BackgroundRemover.jpg') no-repeat center center fixed;
-      background-size: contain;
       background-color: #1e1e1e;
       font-family: 'Montserrat', sans-serif;
       color: #ffffff;
@@ -21,6 +19,25 @@
       justify-content: center;
       min-height: 100vh;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Floating logo on top left */
+    .logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 80px;
+      height: 80px;
+      animation: float 3s ease-in-out infinite;
+      z-index: 10;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
     }
 
     h1 {
@@ -64,6 +81,9 @@
   </style>
 </head>
 <body>
+
+  <!-- Floating logo in top-left -->
+  <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo">
 
   <h1>UFS Interview Lookup</h1>
   <p>Enter your IITK Email ID:</p>
