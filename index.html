@@ -96,7 +96,7 @@
       result.textContent = "Looking up...";
       
       try {
-        const res = await fetch(`https://script.google.com/macros/s/YOUR_DEPLOYED_URL/exec?email=${encodeURIComponent(email)}`);
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
         const data = await res.json();
 
         if (data.error) {
