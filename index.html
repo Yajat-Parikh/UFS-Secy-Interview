@@ -22,6 +22,7 @@
       overflow: hidden;
     }
 
+    /* Animated background dots */
     .stars {
       position: fixed;
       width: 100%;
@@ -38,6 +39,7 @@
       to { background-position: 1000px 1000px; }
     }
 
+    /* Floating logo enlarged on desktop, smaller on mobile */
     .logo {
       position: absolute;
       top: 20px;
@@ -48,16 +50,18 @@
       z-index: 1;
     }
 
-    @media only screen and (max-width: 768px) {
-      .logo {
-        display: none;
-      }
-    }
-
     @keyframes float {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-15px); }
       100% { transform: translateY(0px); }
+    }
+
+    @media (max-width: 768px) {
+      .logo {
+        width: 80px;
+        height: 80px;
+        animation: none;
+      }
     }
 
     h1 {
@@ -129,10 +133,11 @@
     }
   </style>
 </head>
-<body oncontextmenu="return false;" onkeydown="return !(event.keyCode==123 || (event.ctrlKey && event.shiftKey && event.keyCode==73))">
+<body>
 
   <div class="stars"></div>
 
+  <!-- Floating UFS logo -->
   <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo" />
 
   <h1>UFS Interview Schedule'25 </h1>
@@ -153,26 +158,24 @@
   </div>
 
   <script>
-    function lookup() {
+    async function lookup() {
       const email = document.getElementById("email").value.trim();
       const result = document.getElementById("result");
       result.textContent = "⌛ Fetching...";
 
-      const url = 'https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec';
+      try {
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
+        const data = await res.json();
 
-      fetch(`${url}?email=${encodeURIComponent(email)}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.timestamp) {
-            result.textContent = `🕒 Your Interview Time: ${data.timestamp}`;
-          } else {
-            result.textContent = "❌ No record found for that email.";
-          }
-        })
-        .catch(err => {
-          result.textContent = "❗ Error connecting to server.";
-          console.error(err);
-        });
+        if (data.timestamp) {
+          result.textContent = `🕒 Your Interview Time: ${data.timestamp}`;
+        } else {
+          result.textContent = "❌ No record found for that email.";
+        }
+      } catch (err) {
+        result.textContent = "❗ Error connecting to server.";
+        console.error(err);
+      }
     }
   </script>
 
