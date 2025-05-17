@@ -21,6 +21,7 @@
       position: relative;
       overflow: hidden;
     }
+
     .stars {
       position: fixed;
       width: 100%;
@@ -31,10 +32,12 @@
       z-index: 0;
       opacity: 0.1;
     }
+
     @keyframes moveStars {
       from { background-position: 0 0; }
       to { background-position: 1000px 1000px; }
     }
+
     .logo {
       position: absolute;
       top: 20px;
@@ -44,11 +47,13 @@
       animation: float 3s ease-in-out infinite;
       z-index: 1;
     }
+
     @keyframes float {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-15px); }
       100% { transform: translateY(0px); }
     }
+
     @media (max-width: 768px) {
       .logo {
         width: 80px;
@@ -56,6 +61,7 @@
         animation: none;
       }
     }
+
     h1 {
       font-family: 'Orbitron', sans-serif;
       font-size: 2.5rem;
@@ -64,6 +70,7 @@
       margin-bottom: 1rem;
       z-index: 1;
     }
+
     input, button {
       padding: 10px 20px;
       font-size: 1rem;
@@ -74,17 +81,21 @@
       transition: 0.3s ease;
       z-index: 1;
     }
+
     input {
       width: 250px;
     }
+
     button {
       background-color: #00AEEF;
       color: #fff;
       cursor: pointer;
     }
+
     button:hover {
       background-color: #007EAE;
     }
+
     #result {
       margin-top: 1rem;
       font-size: 1.2rem;
@@ -92,52 +103,29 @@
       text-shadow: 0 0 5px #00ffcc;
       z-index: 1;
     }
-    .prompt-container {
-      margin-top: 1.5rem;
-      border: 2px solid #ff6b6b;
-      border-radius: 10px;
-      padding: 15px;
-      max-width: 80%;
-      z-index: 1;
-      display: none; /* Hidden by default */
-    }
-    .prompt-title {
-      color: #ff6b6b;
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .prompt-content {
-      color: #ffffff;
-      font-size: 1.1rem;
-      line-height: 1.5;
-    }
-    .debug-info {
-      margin-top: 1rem;
-      font-size: 0.8rem;
-      color: #777;
-      max-width: 80%;
-      text-align: left;
-      display: none; /* Hidden by default */
-    }
+
     .footer {
       margin-top: 2rem;
       font-size: 0.95rem;
       z-index: 1;
     }
+
     .footer a {
       color: #00AEEF;
       text-decoration: none;
     }
+
     .footer a:hover {
       text-decoration: underline;
     }
+
     .contacts {
       margin-top: 1.5rem;
       z-index: 1;
       font-size: 0.95rem;
       line-height: 1.6;
     }
+
     .emoji {
       font-size: 1.3rem;
     }
@@ -154,13 +142,6 @@
   <input type="email" id="email" placeholder="your@iitk.ac.in" />
   <button onclick="lookup()">Check Interview Time</button>
   <div id="result"></div>
-  
-  <div id="promptContainer" class="prompt-container">
-    <div class="prompt-title">Your Prompt:</div>
-    <div id="promptContent" class="prompt-content"></div>
-  </div>
-  
-  <div id="debugInfo" class="debug-info"></div>
 
   <div class="footer">
     <p>
@@ -177,132 +158,51 @@
   </div>
 
   <script>
-    // Enable debug mode (set to false in production)
-    const DEBUG_MODE = true;
-    
-    // Show debug information if in debug mode
-    function showDebug(message, data) {
-      if (!DEBUG_MODE) return;
-      
-      const debugElement = document.getElementById("debugInfo");
-      debugElement.style.display = "block";
-      
-      let debugText = message + "<br>";
-      if (data) {
-        debugText += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
-      }
-      debugElement.innerHTML = debugText;
-    }
-    
-    // Trigger lookup on enter key press
-    document.getElementById("email").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        lookup();
-      }
-    });
+    const endpoint = "https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec";
 
-    // Prefill email from localStorage
     window.onload = () => {
       const savedEmail = localStorage.getItem("ufsEmail");
-      if (savedEmail) {
-        document.getElementById("email").value = savedEmail;
-      }
-      
-      // If in debug mode, add a debug button
-      if (DEBUG_MODE) {
-        const button = document.createElement("button");
-        button.textContent = "Toggle Debug";
-        button.style.backgroundColor = "#555";
-        button.style.marginTop = "10px";
-        button.onclick = function() {
-          const debugElement = document.getElementById("debugInfo");
-          debugElement.style.display = debugElement.style.display === "none" ? "block" : "none";
-        };
-        document.body.appendChild(button);
-      }
+      if (savedEmail) document.getElementById("email").value = savedEmail;
     };
 
+    document.getElementById("email").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") lookup();
+    });
+
     async function lookup() {
-      const emailInput = document.getElementById("email");
-      const email = emailInput.value.trim();
+      const email = document.getElementById("email").value.trim();
       const result = document.getElementById("result");
-      const promptContainer = document.getElementById("promptContainer");
-      const promptContent = document.getElementById("promptContent");
 
       if (!email) {
-        result.textContent = "⚠ Please enter a valid email.";
-        promptContainer.style.display = "none";
+        result.innerHTML = "⚠ Please enter a valid email.";
         return;
       }
 
+      result.innerHTML = "⌛ Fetching...";
       localStorage.setItem("ufsEmail", email);
-      result.textContent = "⌛ Fetching...";
-      promptContainer.style.display = "none";
+      console.log("Fetching for:", email);
 
       try {
-        const scriptURL = `https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`;
-        showDebug("Fetching data from: ", scriptURL);
-        
-        const res = await fetch(scriptURL);
-        const responseText = await res.text();
-        showDebug("Raw response: ", responseText);
-        
-        let data;
-        try {
-          data = JSON.parse(responseText);
-          showDebug("Parsed data: ", data);
-        } catch (parseErr) {
-          showDebug("Error parsing JSON: ", parseErr.message);
-          throw new Error("Invalid response format");
-        }
+        const url = ${endpoint}?email=${encodeURIComponent(email)};
+        const res = await fetch(url);
+        console.log("Status:", res.status);
+        if (!res.ok) throw new Error(Server error: ${res.status});
 
-        if (data.error) {
-          result.textContent = `❌ ${data.error}`;
-          promptContainer.style.display = "none";
-          return;
-        }
+        const data = await res.json();
+        console.log("Response data:", data);
 
         if (data.timestamp) {
-          result.textContent = `🕒 Your Interview Time: ${data.timestamp}`;
-          
-          // Look for the prompt in multiple possible locations
-          let promptText = "";
-          
-          // Check for "prompt" property (our preferred one)
-          if (data.prompt) {
-            promptText = data.prompt;
-            showDebug("Found prompt in data.prompt", promptText);
-          }
-          // Check for the Vision column which might contain the prompt
-          else if (data.allData && Array.isArray(data.allData)) {
-            // Try to find any non-empty string that might be the prompt
-            for (let i = 0; i < data.allData.length; i++) {
-              const item = data.allData[i];
-              if (typeof item === 'string' && item.trim() !== "" && 
-                  item !== data.email && item !== data.timestamp) {
-                promptText = item;
-                showDebug(`Found potential prompt in data.allData[${i}]`, promptText);
-                break;
-              }
-            }
-          }
-          
-          // Display the prompt if found
-          if (promptText && promptText.trim() !== "") {
-            promptContent.textContent = promptText;
-            promptContainer.style.display = "block";
-          } else {
-            promptContainer.style.display = "none";
-            showDebug("No prompt found in response data", null);
+          result.innerHTML = 🕒 Your Interview Time: ${data.timestamp};
+          if (data.Prompt) {
+            result.innerHTML += <br><span style="color: red;">${data.Prompt}</span>;
           }
         } else {
-          result.textContent = "❌ No record found for that email.";
-          promptContainer.style.display = "none";
+          result.innerHTML = "❌ No record found for that email.";
         }
+
       } catch (err) {
-        result.textContent = "❗ Error connecting to server.";
-        showDebug("Error details: ", err.message);
-        promptContainer.style.display = "none";
+        console.error("Fetch error:", err);
+        result.innerHTML = "❗ Error connecting to server. Check console.";
       }
     }
   </script>
