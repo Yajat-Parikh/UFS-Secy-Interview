@@ -3,164 +3,173 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UFS Interview Schedule'25</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <title>UFS Interview Schedule'25 | IIT Kanpur</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Montserrat&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Orbitron', sans-serif;
-      background-color: #121212;
-      color: white;
-      overflow-x: hidden;
+      background-color: #1e1e1e;
+      font-family: 'Montserrat', sans-serif;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
       position: relative;
+      overflow: hidden;
     }
 
-    body::before {
-      content: '✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨✨';
-      position: absolute;
-      font-size: 20px;
-      top: 0;
-      left: 0;
+    /* Animated background dots */
+    .stars {
+      position: fixed;
       width: 100%;
       height: 100%;
-      white-space: pre-wrap;
-      animation: sparkle 15s linear infinite;
+      background: radial-gradient(white 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: moveStars 20s linear infinite;
+      z-index: 0;
       opacity: 0.1;
-      pointer-events: none;
     }
 
-    @keyframes sparkle {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-100%); }
+    @keyframes moveStars {
+      from { background-position: 0 0; }
+      to { background-position: 1000px 1000px; }
     }
 
+    /* Floating logo enlarged */
     .logo {
       position: absolute;
-      top: 10px;
-      left: 10px;
-      width: 150px;
-      animation: floatLogo 3s ease-in-out infinite;
+      top: 20px;
+      left: 20px;
+      width: 200px;
+      height: 200px;
+      animation: float 3s ease-in-out infinite;
+      z-index: 1;
     }
 
-    @keyframes floatLogo {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    .container {
-      text-align: center;
-      margin-top: 200px;
-      padding: 0 20px;
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+      100% { transform: translateY(0px); }
     }
 
     h1 {
-      font-size: 2.5em;
-      color: #00d9ff;
-      text-shadow: 0 0 10px #00d9ff;
-      animation: glowText 2s ease-in-out infinite alternate;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.5rem;
+      color: #00AEEF;
+      text-shadow: 0 0 10px #00AEEF;
+      margin-bottom: 1rem;
+      z-index: 1;
     }
 
-    @keyframes glowText {
-      0% { text-shadow: 0 0 5px #00d9ff; }
-      100% { text-shadow: 0 0 20px #00d9ff; }
-    }
-
-    input[type="email"] {
-      padding: 10px;
-      font-size: 1em;
-      border-radius: 5px;
+    input, button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      margin: 0.5rem;
       border: none;
-      width: 80%;
-      max-width: 300px;
+      border-radius: 8px;
+      outline: none;
+      transition: 0.3s ease;
+      z-index: 1;
+    }
+
+    input {
+      width: 250px;
     }
 
     button {
-      margin-top: 10px;
-      padding: 10px 20px;
-      font-size: 1em;
-      background-color: #00aaff;
-      border: none;
-      border-radius: 5px;
-      color: white;
+      background-color: #00AEEF;
+      color: #fff;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
     button:hover {
-      background-color: #008ecc;
+      background-color: #007EAE;
     }
 
-    .social, .leaders {
-      margin-top: 30px;
-      font-size: 1em;
+    #result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #00ffcc;
+      text-shadow: 0 0 5px #00ffcc;
+      z-index: 1;
     }
 
-    .social a {
-      color: #00aaff;
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      z-index: 1;
+    }
+
+    .footer a {
+      color: #00AEEF;
       text-decoration: none;
     }
 
-    .leaders {
-      margin-top: 20px;
+    .footer a:hover {
+      text-decoration: underline;
     }
 
-    .leaders h3 {
-      margin-bottom: 10px;
+    .contacts {
+      margin-top: 1.5rem;
+      z-index: 1;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
-    .leaders p {
-      margin: 5px 0;
-    }
-
-    .frisbee {
-      animation: spin 4s linear infinite;
-      display: inline-block;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg);}
-      100% { transform: rotate(360deg);}
-    }
-
-    @media (max-width: 600px) {
-      .logo {
-        width: 120px;
-        top: 5px;
-        left: 5px;
-      }
-      .container {
-        margin-top: 180px;
-      }
+    .emoji {
+      font-size: 1.3rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- Logo -->
-  <img src="logo.png" alt="UFS Logo" class="logo" />
+  <div class="stars"></div>
 
-  <!-- Main Container -->
-  <div class="container">
-    <h1><span class="frisbee">🥏</span> UFS Interview Schedule'25</h1>
-    <p>Enter your IITK Email ID:</p>
-    <input type="email" placeholder="your@iitk.ac.in" />
-    <br/>
-    <button>Check Interview Time</button>
+  <!-- Floating UFS logo -->
+  <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo" />
 
-    <!-- Instagram -->
-    <div class="social">
-      📸 <a href="https://www.instagram.com/ultimatefrisbee_iitk/" target="_blank">Follow us on Instagram</a> for updates!
-    </div>
+  <h1>UFS Interview Schedule'25 </h1>
+  <p>Enter your IITK Email ID:</p>
+  <input type="email" id="email" placeholder="your@iitk.ac.in" />
+  <button onclick="lookup()">Check Interview Time</button>
+  <div id="result"></div>
 
-    <!-- Leaders Contact -->
-    <div class="leaders">
-      <h3>Ultimate Frisbee Society Leaders:</h3>
-      <p>📞 Yajat Parikh: +91 63525 58102</p>
-      <p>📞 Rohan Kumar: +91 95996 54997</p>
-      <p>📞 Saikiran Banoth: +91 86886 01677</p>
-    </div>
+  <div class="footer">
+    <p>📸 <a href="https://www.instagram.com/ultimatefrisbee_iitk/" target="_blank">Follow us on Instagram</a> for updates!</p>
   </div>
+
+  <div class="contacts">
+    <p><strong>Ultimate Frisbee Society Leaders:</strong></p>
+    <p>📞 Yajat Parikh: +91 63525 58102</p>
+    <p>📞 Rohan Kumar: +91 95996 54997</p>
+    <p>📞 Saikiran Banoth: +91 86886 01677</p>
+  </div>
+
+  <script>
+    async function lookup() {
+      const email = document.getElementById("email").value.trim();
+      const result = document.getElementById("result");
+      result.textContent = "⌛ Fetching...";
+
+      try {
+        const res = await fetch(https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)});
+        const data = await res.json();
+
+        if (data.timestamp) {
+          result.textContent = 🕒 Your Interview Time: ${data.timestamp};
+        } else {
+          result.textContent = "❌ No record found for that email.";
+        }
+      } catch (err) {
+        result.textContent = "❗ Error connecting to server.";
+        console.error(err);
+      }
+    }
+  </script>
 
 </body>
 </html>
