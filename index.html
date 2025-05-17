@@ -158,51 +158,46 @@
   </div>
 
   <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec";
-
-    window.onload = () => {
-      const savedEmail = localStorage.getItem("ufsEmail");
-      if (savedEmail) document.getElementById("email").value = savedEmail;
-    };
-
-    document.getElementById("email").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") lookup();
+    // Trigger lookup on enter key press
+    document.getElementById("email").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        lookup();
+      }
     });
 
+    // Prefill email from localStorage
+    window.onload = () => {
+      const savedEmail = localStorage.getItem("ufsEmail");
+      if (savedEmail) {
+        document.getElementById("email").value = savedEmail;
+      }
+    };
+
     async function lookup() {
-      const email = document.getElementById("email").value.trim();
+      const emailInput = document.getElementById("email");
+      const email = emailInput.value.trim();
       const result = document.getElementById("result");
 
       if (!email) {
-        result.innerHTML = "⚠ Please enter a valid email.";
+        result.textContent = "⚠ Please enter a valid email.";
         return;
       }
 
-      result.innerHTML = "⌛ Fetching...";
       localStorage.setItem("ufsEmail", email);
-      console.log("Fetching for:", email);
+      result.textContent = "⌛ Fetching...";
 
       try {
-        const url = ${endpoint}?email=${encodeURIComponent(email)};
-        const res = await fetch(url);
-        console.log("Status:", res.status);
-        if (!res.ok) throw new Error(Server error: ${res.status});
-
+        const res = await fetch(https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)});
         const data = await res.json();
-        console.log("Response data:", data);
 
         if (data.timestamp) {
-          result.innerHTML = 🕒 Your Interview Time: ${data.timestamp};
-          if (data.Prompt) {
-            result.innerHTML += <br><span style="color: red;">${data.Prompt}</span>;
-          }
+          result.textContent = 🕒 Your Interview Time: ${data.timestamp};
         } else {
-          result.innerHTML = "❌ No record found for that email.";
+          result.textContent = "❌ No record found for that email.";
         }
-
       } catch (err) {
-        console.error("Fetch error:", err);
-        result.innerHTML = "❗ Error connecting to server. Check console.";
+        result.textContent = "❗ Error connecting to server.";
+        console.error(err);
       }
     }
   </script>
