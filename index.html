@@ -21,7 +21,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .stars {
       position: fixed;
       width: 100%;
@@ -32,12 +31,10 @@
       z-index: 0;
       opacity: 0.1;
     }
-
     @keyframes moveStars {
       from { background-position: 0 0; }
       to { background-position: 1000px 1000px; }
     }
-
     .logo {
       position: absolute;
       top: 20px;
@@ -47,13 +44,11 @@
       animation: float 3s ease-in-out infinite;
       z-index: 1;
     }
-
     @keyframes float {
       0% { transform: translateY(0px); }
       50% { transform: translateY(-15px); }
       100% { transform: translateY(0px); }
     }
-
     @media (max-width: 768px) {
       .logo {
         width: 80px;
@@ -61,7 +56,6 @@
         animation: none;
       }
     }
-
     h1 {
       font-family: 'Orbitron', sans-serif;
       font-size: 2.5rem;
@@ -70,7 +64,6 @@
       margin-bottom: 1rem;
       z-index: 1;
     }
-
     input, button {
       padding: 10px 20px;
       font-size: 1rem;
@@ -81,21 +74,17 @@
       transition: 0.3s ease;
       z-index: 1;
     }
-
     input {
       width: 250px;
     }
-
     button {
       background-color: #00AEEF;
       color: #fff;
       cursor: pointer;
     }
-
     button:hover {
       background-color: #007EAE;
     }
-
     #result {
       margin-top: 1rem;
       font-size: 1.2rem;
@@ -103,29 +92,24 @@
       text-shadow: 0 0 5px #00ffcc;
       z-index: 1;
     }
-
     .footer {
       margin-top: 2rem;
       font-size: 0.95rem;
       z-index: 1;
     }
-
     .footer a {
       color: #00AEEF;
       text-decoration: none;
     }
-
     .footer a:hover {
       text-decoration: underline;
     }
-
     .contacts {
       margin-top: 1.5rem;
       z-index: 1;
       font-size: 0.95rem;
       line-height: 1.6;
     }
-
     .emoji {
       font-size: 1.3rem;
     }
