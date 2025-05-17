@@ -22,7 +22,6 @@
       overflow: hidden;
     }
 
-    /* Animated background dots */
     .stars {
       position: fixed;
       width: 100%;
@@ -39,7 +38,6 @@
       to { background-position: 1000px 1000px; }
     }
 
-    /* Floating logo enlarged on desktop, smaller on mobile */
     .logo {
       position: absolute;
       top: 20px;
@@ -137,7 +135,6 @@
 
   <div class="stars"></div>
 
-  <!-- Floating UFS logo -->
   <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo" />
 
   <h1>UFS Interview Schedule'25 </h1>
@@ -158,9 +155,33 @@
   </div>
 
   <script>
+    // Load last entered email if available
+    window.onload = function() {
+      const savedEmail = localStorage.getItem("ufs_email");
+      if (savedEmail) {
+        document.getElementById("email").value = savedEmail;
+      }
+    };
+
+    // Trigger lookup on Enter key
+    document.getElementById("email").addEventListener("keypress", function(event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        lookup();
+      }
+    });
+
     async function lookup() {
-      const email = document.getElementById("email").value.trim();
+      const emailField = document.getElementById("email");
+      const email = emailField.value.trim();
       const result = document.getElementById("result");
+
+      if (!email) {
+        result.textContent = "⚠️ Please enter a valid email.";
+        return;
+      }
+
+      localStorage.setItem("ufs_email", email); // Save email to localStorage
       result.textContent = "⌛ Fetching...";
 
       try {
