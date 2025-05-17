@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>UFS Interview Lookup | IIT Kanpur</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Montserrat&display=swap" rel="stylesheet">
-
   <style>
     body {
       margin: 0;
@@ -23,20 +22,37 @@
       overflow: hidden;
     }
 
-    /* Floating logo on top left */
+    /* Animated background dots */
+    .stars {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(white 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: moveStars 20s linear infinite;
+      z-index: 0;
+      opacity: 0.1;
+    }
+
+    @keyframes moveStars {
+      from { background-position: 0 0; }
+      to { background-position: 1000px 1000px; }
+    }
+
+    /* Floating logo enlarged */
     .logo {
       position: absolute;
       top: 20px;
       left: 20px;
-      width: 80px;
-      height: 80px;
+      width: 200px;
+      height: 200px;
       animation: float 3s ease-in-out infinite;
-      z-index: 10;
+      z-index: 1;
     }
 
     @keyframes float {
       0% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      50% { transform: translateY(-15px); }
       100% { transform: translateY(0px); }
     }
 
@@ -46,6 +62,7 @@
       color: #00AEEF;
       text-shadow: 0 0 10px #00AEEF;
       margin-bottom: 1rem;
+      z-index: 1;
     }
 
     input, button {
@@ -56,6 +73,7 @@
       border-radius: 8px;
       outline: none;
       transition: 0.3s ease;
+      z-index: 1;
     }
 
     input {
@@ -77,19 +95,59 @@
       font-size: 1.2rem;
       color: #00ffcc;
       text-shadow: 0 0 5px #00ffcc;
+      z-index: 1;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      z-index: 1;
+    }
+
+    .footer a {
+      color: #00AEEF;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .contacts {
+      margin-top: 1.5rem;
+      z-index: 1;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .emoji {
+      font-size: 1.3rem;
     }
   </style>
 </head>
 <body>
 
-  <!-- Floating logo in top-left -->
-  <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo">
+  <div class="stars"></div>
 
-  <h1>UFS Interview Lookup</h1>
+  <!-- Floating UFS logo -->
+  <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo" />
+
+  <h1>UFS Interview Lookup 🎯</h1>
   <p>Enter your IITK Email ID:</p>
   <input type="email" id="email" placeholder="your@iitk.ac.in" />
   <button onclick="lookup()">Check Interview Time</button>
   <div id="result"></div>
+
+  <div class="footer">
+    <p>📸 <a href="https://www.instagram.com/ultimatefrisbee_iitk/" target="_blank">Follow us on Instagram</a> for updates!</p>
+  </div>
+
+  <div class="contacts">
+    <p><strong>Ultimate Frisbee Society Leaders:</strong></p>
+    <p>📞 Yajat Parikh: +91 63525 58102</p>
+    <p>📞 Rohan Kumar: +91 95996 54997</p>
+    <p>📞 Saikiran Banoth: +91 86886 01677</p>
+  </div>
 
   <script>
     async function lookup() {
