@@ -158,24 +158,19 @@
   </div>
 
   <script>
-    // Trigger lookup on enter key press
-    document.getElementById("email").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        lookup();
-      }
-    });
+    const endpoint = "https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec";
 
-    // Prefill email from localStorage
     window.onload = () => {
       const savedEmail = localStorage.getItem("ufsEmail");
-      if (savedEmail) {
-        document.getElementById("email").value = savedEmail;
-      }
+      if (savedEmail) document.getElementById("email").value = savedEmail;
     };
 
+    document.getElementById("email").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") lookup();
+    });
+
     async function lookup() {
-      const emailInput = document.getElementById("email");
-      const email = emailInput.value.trim();
+      const email = document.getElementById("email").value.trim();
       const result = document.getElementById("result");
 
       if (!email) {
@@ -183,12 +178,18 @@
         return;
       }
 
-      localStorage.setItem("ufsEmail", email);
       result.innerHTML = "⌛ Fetching...";
+      localStorage.setItem("ufsEmail", email);
+      console.log("Fetching for:", email);
 
       try {
-        const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
+        const url = `${endpoint}?email=${encodeURIComponent(email)}`;
+        const res = await fetch(url);
+        console.log("Status:", res.status);
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
         const data = await res.json();
+        console.log("Response data:", data);
 
         if (data.timestamp) {
           result.innerHTML = `🕒 Your Interview Time: ${data.timestamp}`;
@@ -198,9 +199,10 @@
         } else {
           result.innerHTML = "❌ No record found for that email.";
         }
+
       } catch (err) {
-        result.innerHTML = "❗ Error connecting to server.";
-        console.error(err);
+        console.error("Fetch error:", err);
+        result.innerHTML = "❗ Error connecting to server. Check console.";
       }
     }
   </script>
