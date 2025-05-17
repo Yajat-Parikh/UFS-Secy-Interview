@@ -144,7 +144,10 @@
   <div id="result"></div>
 
   <div class="footer">
-    <p>📸 <a href="https://www.instagram.com/ultimatefrisbee_iitk/" target="_blank">Follow us on Instagram</a> for updates!</p>
+    <p>
+      <img src="instagram.png" alt="Instagram" style="height: 1.2em; vertical-align: middle; margin-right: 8px;">
+      <a href="https://www.instagram.com/ultimatefrisbee_iitk/" target="_blank">Follow us on Instagram</a> for updates!
+    </p>
   </div>
 
   <div class="contacts">
@@ -155,25 +158,24 @@
   </div>
 
   <script>
-    // Load last entered email if available
-    window.onload = function() {
-      const savedEmail = localStorage.getItem("ufs_email");
+    // Trigger lookup on enter key press
+    document.getElementById("email").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        lookup();
+      }
+    });
+
+    // Prefill email from localStorage
+    window.onload = () => {
+      const savedEmail = localStorage.getItem("ufsEmail");
       if (savedEmail) {
         document.getElementById("email").value = savedEmail;
       }
     };
 
-    // Trigger lookup on Enter key
-    document.getElementById("email").addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        lookup();
-      }
-    });
-
     async function lookup() {
-      const emailField = document.getElementById("email");
-      const email = emailField.value.trim();
+      const emailInput = document.getElementById("email");
+      const email = emailInput.value.trim();
       const result = document.getElementById("result");
 
       if (!email) {
@@ -181,7 +183,7 @@
         return;
       }
 
-      localStorage.setItem("ufs_email", email); // Save email to localStorage
+      localStorage.setItem("ufsEmail", email);
       result.textContent = "⌛ Fetching...";
 
       try {
