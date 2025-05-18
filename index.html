@@ -189,12 +189,12 @@
       try {
         const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
         
-        const text = await res.text(); // Read response as text
-        console.log("Raw response:", text); // Log raw response
+        const text = await res.text();
+        console.log("Raw response:", text);
 
         let data;
         try {
-          data = JSON.parse(text); // Try to parse JSON
+          data = JSON.parse(text);
         } catch (jsonErr) {
           result.textContent = "❗ Unexpected response format.";
           console.error("JSON Parse Error:", jsonErr);
@@ -202,7 +202,10 @@
         }
 
         if (data.timestamp) {
-          result.textContent = `🕒 Your Interview Time: ${data.timestamp}`;
+          result.innerHTML = `
+            🕒 Your Interview Time: ${data.timestamp}<br>
+            <span style="color: red; text-shadow: 0 0 5px red;">🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" target="_blank" style="color: red; text-shadow: 0 0 5px red;">https://meet.google.com/sar-vuvv-wau</a></span>
+          `;
         } else if (data.message) {
           result.textContent = `ℹ️ ${data.message}`;
         } else {
