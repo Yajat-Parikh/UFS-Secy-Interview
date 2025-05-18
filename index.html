@@ -15,11 +15,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       min-height: 100vh;
       text-align: center;
       position: relative;
-      overflow: hidden;
+      overflow-x: hidden;
+      overflow-y: auto;
     }
 
     .stars {
@@ -67,6 +68,7 @@
       font-size: 2.5rem;
       color: #00AEEF;
       text-shadow: 0 0 10px #00AEEF;
+      margin-top: 80px;
       margin-bottom: 1rem;
       z-index: 1;
     }
@@ -102,6 +104,8 @@
       color: #00ffcc;
       text-shadow: 0 0 5px #00ffcc;
       z-index: 1;
+      max-width: 90%;
+      word-wrap: break-word;
     }
 
     .footer {
@@ -192,14 +196,10 @@
         console.log("Response data:", data);
 
         if (data.timestamp) {
-          result.innerHTML = `
-            🕒 Your Interview Schedule: ${data.timestamp}<br><br>
-            🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" 
-              style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;" target="_blank">
-              https://meet.google.com/sar-vuvv-wau
-            </a>
-          `;
-
+          result.innerHTML = `🕒 <span style="color: #00CED1;">Your Interview Schedule:</span> ${data.timestamp}<br><br>
+            <span style="color: #00CED1;">🔗 Link for interview:</span> 
+            <a href="https://meet.google.com/sar-vuvv-wau" style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;">https://meet.google.com/sar-vuvv-wau</a>`;
+          
           if (data.Prompt) {
             result.innerHTML += `<br><span style="color: red;">${data.Prompt}</span>`;
           }
