@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -158,62 +158,52 @@
   </div>
 
   <script>
-    // Trigger lookup on Enter key press
-    document.getElementById("email").addEventListener("keydown", function(event) {
-      if (event.key === "Enter") {
-        lookup();
-      }
-    });
+    const endpoint = "https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec";
 
-    // Prefill email from localStorage
     window.onload = () => {
       const savedEmail = localStorage.getItem("ufsEmail");
-      if (savedEmail) {
-        document.getElementById("email").value = savedEmail;
-      }
+      if (savedEmail) document.getElementById("email").value = savedEmail;
     };
 
+    document.getElementById("email").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") lookup();
+    });
+
     async function lookup() {
-      const emailInput = document.getElementById("email");
-      const email = emailInput.value.trim();
+      const email = document.getElementById("email").value.trim();
       const result = document.getElementById("result");
 
       if (!email) {
-        result.textContent = "⚠️ Please enter a valid email.";
+        result.innerHTML = "⚠ Please enter a valid email.";
         return;
       }
 
+      result.innerHTML = "⌛ Fetching...";
       localStorage.setItem("ufsEmail", email);
-      result.textContent = "⌛ Fetching...";
+      console.log("Fetching for:", email);
 
       try {
-        const res = await fetch(https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)});
-        
-        const text = await res.text(); // Read response as text
-        console.log("Raw response:", text); // Log raw response
+        const url = ${endpoint}?email=${encodeURIComponent(email)};
+        const res = await fetch(url);
+        console.log("Status:", res.status);
+        if (!res.ok) throw new Error(Server error: ${res.status});
 
-        let data;
-        try {
-          data = JSON.parse(text); // Try to parse JSON
-        } catch (jsonErr) {
-          result.textContent = "❗ Unexpected response format.";
-          console.error("JSON Parse Error:", jsonErr);
-          return;
-        }
+        const data = await res.json();
+        console.log("Response data:", data);
 
         if (data.timestamp) {
-          result.textContent = 🕒 Your Interview Schedule: ${data.timestamp}
-          <br> <br>
-          <span style="color: #1E90FF; text-shadow: 0 0 5px #00BFFF;">🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" target="_blank" style="color: red; text-shadow: 0 0 5px red;">https://meet.google.com/sar-vuvv-wau</a></span>
-          ;
-        } else if (data.message) {
-          result.textContent = ℹ️ ${data.message};
+          result.innerHTML = 🕒 Your Interview Schedule: ${data.timestamp}<br><br>🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;">https://meet.google.com/sar-vuvv-wau</a>
+         ;
+          if (data.Prompt) {
+            result.innerHTML += <br><span style="color: red;">${data.Prompt}</span>;
+          }
         } else {
-          result.textContent = "❌ No record found for that email.";
+          result.innerHTML = "❌ No record found for that email.";
         }
+
       } catch (err) {
-        result.textContent = "❗ Error connecting to server.";
         console.error("Fetch error:", err);
+        result.innerHTML = "❗ Error connecting to server. Check console.";
       }
     }
   </script>
