@@ -6,10 +6,6 @@
   <title>UFS Interview Schedule'25 | IIT Kanpur</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&family=Montserrat&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
       padding: 0;
@@ -19,12 +15,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
       min-height: 100vh;
       text-align: center;
       position: relative;
-      overflow-y: auto;
-      padding-top: 220px;
+      overflow: hidden;
     }
 
     .stars {
@@ -61,12 +56,8 @@
 
     @media (max-width: 768px) {
       .logo {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-        width: 100px;
-        height: 100px;
-        margin: 0;
+        width: 80px;
+        height: 80px;
         animation: none;
       }
     }
@@ -74,8 +65,8 @@
     h1 {
       font-family: 'Orbitron', sans-serif;
       font-size: 2.5rem;
-      color: #00CED1;
-      text-shadow: 0 0 10px #00CED1;
+      color: #00AEEF;
+      text-shadow: 0 0 10px #00AEEF;
       margin-bottom: 1rem;
       z-index: 1;
     }
@@ -146,7 +137,7 @@
 
   <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo" />
 
-  <h1>UFS Interview Schedule'25</h1>
+  <h1>UFS Interview Schedule'25 </h1>
   <p>Enter your IITK Email ID:</p>
   <input type="email" id="email" placeholder="your@iitk.ac.in" />
   <button onclick="lookup()">Check Interview Time</button>
@@ -167,51 +158,62 @@
   </div>
 
   <script>
-    const endpoint = "https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec";
-
-    window.onload = () => {
-      const savedEmail = localStorage.getItem("ufsEmail");
-      if (savedEmail) document.getElementById("email").value = savedEmail;
-    };
-
-    document.getElementById("email").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") lookup();
+    // Trigger lookup on Enter key press
+    document.getElementById("email").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        lookup();
+      }
     });
 
+    // Prefill email from localStorage
+    window.onload = () => {
+      const savedEmail = localStorage.getItem("ufsEmail");
+      if (savedEmail) {
+        document.getElementById("email").value = savedEmail;
+      }
+    };
+
     async function lookup() {
-      const email = document.getElementById("email").value.trim();
+      const emailInput = document.getElementById("email");
+      const email = emailInput.value.trim();
       const result = document.getElementById("result");
 
       if (!email) {
-        result.innerHTML = "⚠ Please enter a valid email.";
+        result.textContent = "⚠️ Please enter a valid email.";
         return;
       }
 
-      result.innerHTML = "⌛ Fetching...";
       localStorage.setItem("ufsEmail", email);
-      console.log("Fetching for:", email);
+      result.textContent = "⌛ Fetching...";
 
       try {
-        const url = `${endpoint}?email=${encodeURIComponent(email)}`;
-        const res = await fetch(url);
-        console.log("Status:", res.status);
-        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+        const res = await fetch(`https://script.google.com/macros/s/AKfycbzBodb38wr7UraWhDVNP2H25Wd1N_b2AfLDPPTjVDsOSaOvsj_0BFUzUuOjLZtMkXNoqA/exec?email=${encodeURIComponent(email)}`);
+        
+        const text = await res.text();
+        console.log("Raw response:", text);
 
-        const data = await res.json();
-        console.log("Response data:", data);
-
-        if (data.timestamp) {
-          result.innerHTML = `<span style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;">🕒 Your Interview Schedule: ${data.timestamp}</span><br><br>🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;">https://meet.google.com/sar-vuvv-wau</a>`;
-          if (data.Prompt) {
-            result.innerHTML += `<br><span style="color: red;">${data.Prompt}</span>`;
-          }
-        } else {
-          result.innerHTML = "❌ No record found for that email.";
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (jsonErr) {
+          result.textContent = "❗ Unexpected response format.";
+          console.error("JSON Parse Error:", jsonErr);
+          return;
         }
 
+        if (data.timestamp) {
+          result.innerHTML = `
+            🕒 Your Interview Time: ${data.timestamp}<br>
+            <span style="color: red; text-shadow: 0 0 5px red;">🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" target="_blank" style="color: red; text-shadow: 0 0 5px red;">https://meet.google.com/sar-vuvv-wau</a></span>
+          `;
+        } else if (data.message) {
+          result.textContent = `ℹ️ ${data.message}`;
+        } else {
+          result.textContent = "❌ No record found for that email.";
+        }
       } catch (err) {
+        result.textContent = "❗ Error connecting to server.";
         console.error("Fetch error:", err);
-        result.innerHTML = "❗ Error connecting to server. Check console.";
       }
     }
   </script>
