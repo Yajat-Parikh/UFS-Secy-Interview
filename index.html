@@ -183,19 +183,25 @@
       console.log("Fetching for:", email);
 
       try {
-        const url = ${endpoint}?email=${encodeURIComponent(email)};
+        const url = `${endpoint}?email=${encodeURIComponent(email)}`;
         const res = await fetch(url);
         console.log("Status:", res.status);
-        if (!res.ok) throw new Error(Server error: ${res.status});
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
 
         const data = await res.json();
         console.log("Response data:", data);
 
         if (data.timestamp) {
-          result.innerHTML = 🕒 Your Interview Schedule: ${data.timestamp}<br><br>🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;">https://meet.google.com/sar-vuvv-wau</a>
-         ;
+          result.innerHTML = `
+            🕒 Your Interview Schedule: ${data.timestamp}<br><br>
+            🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" 
+              style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;" target="_blank">
+              https://meet.google.com/sar-vuvv-wau
+            </a>
+          `;
+
           if (data.Prompt) {
-            result.innerHTML += <br><span style="color: red;">${data.Prompt}</span>;
+            result.innerHTML += `<br><span style="color: red;">${data.Prompt}</span>`;
           }
         } else {
           result.innerHTML = "❌ No record found for that email.";
