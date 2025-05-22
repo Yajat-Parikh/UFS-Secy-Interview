@@ -139,10 +139,10 @@
 
   <img src="logo-Picsart-BackgroundRemover.jpg" alt="UFS Logo" class="logo" />
 
-  <h1>UFS Interview Schedule'25 </h1>
+  <h1>UFS Interview Results'25</h1>
   <p>Enter your IITK Email ID:</p>
   <input type="email" id="email" placeholder="your@iitk.ac.in" />
-  <button onclick="lookup()">Check Interview Time</button>
+  <button onclick="lookup()">Check Interview Result</button>
   <div id="result"></div>
 
   <div class="footer">
@@ -205,8 +205,9 @@
 
         if (data.timestamp) {
           result.innerHTML = `
-            🕒 Your Interview Schedule: ${data.timestamp}<br><br>
-            <span style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;">🔗 Link for interview: <a href="https://meet.google.com/sar-vuvv-wau" target="_blank" style="color: #00CED1; text-shadow: 0 0 5px #00CED1;">https://meet.google.com/sar-vuvv-wau</a></span>
+            ${data.timestamp}<br><br>
+            <span style="color: #00CED1; text-shadow: 0 0 5px #20B2AA;">🔗 Link for Whatsapp grp: <a 				  		    href="https://chat.whatsapp.com/LCXbpX9cHyYKqZOq9HuiqU" target="_blank" style="color: #00CED1;
+ 	    text-shadow: 0 0 5px #00CED1;">https://chat.whatsapp.com/LCXbpX9cHyYKqZOq9HuiqU</a></span>
           `;
         } else if (data.message) {
           result.textContent = `ℹ️ ${data.message}`;
